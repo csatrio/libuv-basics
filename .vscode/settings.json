@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "system_error": "cpp",
+        "cstdlib": "cpp",
+        "deque": "cpp",
+        "unordered_map": "cpp",
+        "*.tcc": "c",
+        "fstream": "c",
+        "istream": "c",
+        "ostream": "c",
+        "sstream": "c"
+    }
+}
