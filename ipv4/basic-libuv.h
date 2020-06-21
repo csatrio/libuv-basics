@@ -1,22 +1,22 @@
 #include "uv.h"
 
-#define print(arg) printf("%s\n", arg);
-#define debug(data) fprintf(stderr, "%s\n", data);
+#define print(arg) printf("%s\n", arg)
+#define debug(data) fprintf(stderr, "%s\n", data)
 #define print_error(code) \
-    if (code != 0)        \
-        fprintf(stderr, "%s: %s\n", uv_err_name(code), uv_strerror(code));
+  if (code != 0)          \
+  fprintf(stderr, "%s: %s\n", uv_err_name(code), uv_strerror(code))
 
-short FLAG_WRITE = 1;
-short FLAG_DISCONNECT = 2;
+#define FLAG_WRITE 1
+#define FLAG_DISCONNECT 2
 
 typedef struct
 {
-    uv_tcp_t *stream;
-    uv_async_t async_handle;
-    short flag;
-    void *attachment;
-    char *write_data;
-    size_t write_data_len;
+  uv_tcp_t *stream;
+  uv_async_t async_handle;
+  int flag;
+  void *attachment;
+  char *write_data;
+  size_t write_data_len;
 } connection_t;
 
 typedef struct

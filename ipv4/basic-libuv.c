@@ -46,7 +46,7 @@ static void after_shutdown(uv_shutdown_t *req, int status)
 }
 
 static inline void after_close(uv_handle_t *handle)
-{    
+{
     connection c = (connection)handle->data;
     free(handle);
     free_connection(c);
@@ -103,6 +103,7 @@ static inline void alloc_cb(uv_handle_t *handle, size_t suggested_size, uv_buf_t
 static void async_handler(uv_async_t *handle)
 {
     connection c = (connection)handle->data;
+
     if (c->flag == FLAG_WRITE)
     {
         write_req_t *wr = (write_req_t *)malloc(sizeof(write_req_t));
@@ -197,7 +198,8 @@ int run_server(const char *ip, int port,
 
 void disconnect(connection c)
 {
-    c->flag = FLAG_DISCONNECT;
+    connection con = (connection)c->async_handle.data;
+    con->flag = FLAG_DISCONNECT;
     uv_async_send(&c->async_handle);
 }
 
@@ -212,8 +214,11 @@ void write_simple(connection c, char *data)
 
 void write(connection c, char *data, size_t len)
 {
-    c->write_data = data;
-    c->write_data_len = len;
-    c->flag = FLAG_WRITE;
-    uv_async_send(&c->async_handle);
+    if (c->flag != FLAG_DISCONNECT)
+    {
+        c->write_data = data;
+        c->write_data_len = len;
+        c->flag = FLAG_WRITE;
+        uv_async_send(&c->async_handle);
+    }
 }
