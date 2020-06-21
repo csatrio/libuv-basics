@@ -198,8 +198,7 @@ int run_server(const char *ip, int port,
 
 void disconnect(connection c)
 {
-    connection con = (connection)c->async_handle.data;
-    con->flag = FLAG_DISCONNECT;
+    c->flag = FLAG_DISCONNECT;
     uv_async_send(&c->async_handle);
 }
 
